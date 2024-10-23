@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'en-US' }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% seo %}
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    {% include head-custom.html %}
+    <style>
+      body {
+        background-color: rgb(23, 23, 23);
+        color: white;
+        overflow-x: hidden;
+        display: flex;
+        justify-content: center;
+      }
+
+      .content {
+        background-color: #333;
+        color: white;
+        padding: 20px;
+        max-width: 900px;
+        margin: 50px;
+        border-radius: 10px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5), inset 1px 1px 6px rgba(255, 255, 255, 0.1);
+        text-align: center;
+      }
+
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(30, 30, 30, 0.8);
+        padding: 10px;
+        z-index: 10;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .search-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .navbar input {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid lightgray;
+        background-color: rgb(38, 38, 38);
+        color: white;
+        margin-left: 5px;
+        min-width: 150px;
+      }
+
+      .search-info {
+        display: none;
+        color: white;
+        margin-left: 5px;
+      }
+
+      a {
+        color: lightblue;
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: cyan;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        color: white;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+      }
+
+      pre, code {
+        background-color: lightgray;
+        color: black;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.1);
+      }
+
+      .alert {
+        background-color: #444;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-left: 5px solid #ffcc00;
+      }
+
+      .hidden {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+      }
+
+      .revealed {
+        opacity: 1;
+        transition: opacity 0.5s ease-in-out;
+      }
+
+      table, th, td {
+        border: 1px solid #777;
+        background-color: white;
+        color: black;
+        padding: 10px;
+      }
+
+      th {
+        background-color: #333;
+        color: white;
+      }
+
+      @media (max-width: 600px) {
+        th, td {
+          width: 100%;
+        }
+
+        .content {
+          margin: 20px;
+          padding: 15px;
+        }
+
+        .navbar {
+          padding: 5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search..." />
+      </div>
+    </div>
+    <div class="content">
+      <div class="container-lg px-3 my-5 markdown-body">
+        {% if site.title and site.title != page.title %}
+          <h1><a href="{{ '/' | absolute_url }}">{{ site.title }}</a></h1>
+        {% endif %}
+        {{ content }}
+        {% if site.github.private != true and site.github.license %}
+          <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
+            PatternWriter is developed by <a href="https://nobodyteam.com">NOBODY Team</a>.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>
+      anchors.add();
+      document.addEventListener('DOMContentLoaded', function() {
+        const elementsToReveal = document.querySelectorAll('.markdown-body *');
+        elementsToReveal.forEach(element => {
+          element.classList.add('hidden');
+        });
+
+        let observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('revealed');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+
+        elementsToReveal.forEach(element => {
+          observer.observe(element);
+        });
+      });
+
+      const searchInput = document.getElementById('search');
+      const results = [];
+      let currentIndex = -1;
+
+      searchInput.addEventListener('input', function() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const matches = document.querySelectorAll('.markdown-body *');
+        results.length = 0;
+
+        matches.forEach(match => {
+          match.style.backgroundColor = '';
+          if (match.textContent.toLowerCase().includes(searchTerm) && searchTerm.trim() !== '') {
+            match.style.backgroundColor = 'rgba(255, 255, 0, 0.5)';
+            results.push(match);
+          }
+        });
+
+        currentIndex = results.length ? 0 : -1;
+        if (currentIndex >= 0) {
+          results[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+    </script>
+  </body>
+</html>
