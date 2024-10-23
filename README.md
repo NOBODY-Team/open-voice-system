@@ -1,5 +1,5 @@
 # OVS - OpenVoiceSystem
 
-![image](https://github.com/user-attachments/assets/70c17166-048b-4263-b5bd-f114fa4f2b9e)
+![ovsbannertransparent](https://github.com/user-attachments/assets/172426a3-f58e-42c8-86e7-10719bf67c07)
 
 OVS - Open Voice System - Ultraminimalistic Realtime Audio Recording Application capable of sampling recorded audio at upwards to 1.024 mHz (1024000 Hz) in realtime.
